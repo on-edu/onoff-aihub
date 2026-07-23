@@ -2,69 +2,516 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AI Company</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OnOff | AI교육 플랫폼</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
+  :root{
+    --bg:#F7F8FB;
+    --surface:#FFFFFF;
+    --ink:#12141A;
+    --ink-soft:#5B6272;
+    --on:#2E5BFF;
+    --on-deep:#1B3FD9;
+    --on-glow:#6FE0FF;
+    --off:#C7CCD6;
+    --off-soft:#EEF0F4;
+    --line:#E3E6EE;
+    --radius:18px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Pretendard', -apple-system, sans-serif;
+    line-height:1.5;
+    overflow-x:hidden;
+  }
+  .mono{font-family:'JetBrains Mono', monospace;}
+  a{color:inherit; text-decoration:none;}
+  ul{list-style:none;}
+  img{max-width:100%; display:block;}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 32px;}
 
-body{
-margin:0;
-background:#08121d;
-font-family:Arial;
-color:white;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
-}
+  /* ---------- Header ---------- */
+  header{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    background:rgba(247,248,251,0.85);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid transparent;
+    transition:border-color .3s ease, background .3s ease;
+  }
+  header.scrolled{ border-color:var(--line); background:rgba(247,248,251,0.95); }
+  .nav-row{
+    display:flex; align-items:center; justify-content:space-between;
+    height:76px;
+  }
+  .logo{ display:flex; align-items:center; gap:10px; font-weight:800; font-size:20px; letter-spacing:-0.02em;}
+  .logo-switch{
+    width:34px; height:18px; border-radius:99px; background:var(--ink);
+    position:relative; flex:none;
+  }
+  .logo-switch::after{
+    content:''; position:absolute; top:2px; left:2px; width:14px; height:14px; border-radius:50%;
+    background:var(--on-glow);
+    transition:transform .4s cubic-bezier(.65,0,.35,1);
+    animation: knock 3.5s ease-in-out infinite;
+  }
+  @keyframes knock{
+    0%,40%{transform:translateX(0); background:var(--off);}
+    50%,90%{transform:translateX(16px); background:var(--on-glow);}
+    100%{transform:translateX(0); background:var(--off);}
+  }
+  nav ul{ display:flex; gap:2px; }
+  nav a{
+    display:flex; align-items:baseline; gap:6px;
+    padding:10px 16px; font-size:14.5px; font-weight:600; color:var(--ink-soft);
+    border-radius:99px; transition:color .2s, background .2s;
+  }
+  nav a .num{ font-size:11px; color:var(--off); font-weight:500; }
+  nav a:hover{ color:var(--ink); background:var(--off-soft); }
+  .nav-cta{
+    padding:10px 20px; background:var(--ink); color:#fff !important; border-radius:99px;
+    font-weight:700; font-size:14px;
+  }
+  .nav-cta:hover{ background:var(--on); }
+  @media (max-width:980px){ nav ul{display:none;} }
 
-h1{
-font-size:60px;
-margin-bottom:10px;
-}
+  /* ---------- Hero ---------- */
+  .hero{
+    min-height:100vh; display:flex; align-items:center; position:relative;
+    padding-top:76px;
+    background:linear-gradient(115deg, #14161c 0%, #14161c 46%, #F7F8FB 46%, #F7F8FB 100%);
+    overflow:hidden;
+  }
+  .hero-inner{ position:relative; z-index:2; width:100%; }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:13px; font-weight:600; color:var(--on-glow); margin-bottom:22px;
+  }
+  .eyebrow .dot{width:7px; height:7px; border-radius:50%; background:var(--on-glow); box-shadow:0 0 12px var(--on-glow);}
+  .hero h1{
+    font-size:clamp(40px, 6vw, 76px); font-weight:800; letter-spacing:-0.03em; color:#fff;
+    max-width:11ch; line-height:1.08;
+  }
+  .hero h1 .switch-word{ color:var(--on-glow); position:relative; }
+  .hero p.sub{
+    margin-top:26px; font-size:18px; color:#B8BEC9; max-width:480px; font-weight:400;
+  }
+  .hero-cta{ margin-top:38px; display:flex; gap:14px; }
+  .btn{
+    padding:15px 28px; border-radius:99px; font-weight:700; font-size:15px;
+    display:inline-flex; align-items:center; gap:10px; transition:transform .25s, background .25s, color .25s;
+  }
+  .btn-primary{ background:var(--on); color:#fff; }
+  .btn-primary:hover{ background:var(--on-glow); color:#0d1117; transform:translateY(-2px); }
+  .btn-ghost{ border:1px solid rgba(255,255,255,0.25); color:#fff; }
+  .btn-ghost:hover{ border-color:var(--on-glow); color:var(--on-glow); }
 
-p{
-font-size:20px;
-opacity:.8;
-}
+  .hero-switch-visual{
+    position:absolute; right:6%; top:50%; transform:translateY(-50%); z-index:1;
+    width:340px;
+  }
+  .toggle-big{
+    width:280px; height:130px; border-radius:99px; background:var(--off-soft);
+    border:1px solid var(--line);
+    position:relative; box-shadow:0 30px 60px -20px rgba(46,91,255,0.35);
+  }
+  .toggle-big::after{
+    content:''; position:absolute; top:10px; left:10px; width:110px; height:110px; border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, var(--on-glow), var(--on));
+    animation: slide 4s cubic-bezier(.65,0,.35,1) infinite;
+    box-shadow:0 10px 30px rgba(46,91,255,0.5);
+  }
+  @keyframes slide{
+    0%,45%{ left:10px; }
+    55%,100%{ left:160px; }
+  }
+  .hero-caption{ margin-top:20px; text-align:center; font-size:13px; color:var(--ink-soft);}
 
+  @media (max-width:900px){
+    .hero{ background:#14161c; }
+    .hero-switch-visual{ display:none; }
+    .hero p.sub{ color:#B8BEC9; }
+  }
+
+  /* ---------- Section shared ---------- */
+  section{ padding:120px 0; }
+  .section-tag{
+    display:flex; align-items:center; gap:12px; margin-bottom:18px;
+    font-size:13px; font-weight:700; color:var(--on);
+  }
+  .section-tag .line{ width:32px; height:1px; background:var(--on); }
+  h2.section-title{ font-size:clamp(30px, 4vw, 46px); font-weight:800; letter-spacing:-0.02em; max-width:16ch;}
+  .section-desc{ margin-top:18px; color:var(--ink-soft); max-width:520px; font-size:16px; }
+
+  .reveal{ opacity:0; transform:translateY(28px); transition:opacity .7s ease, transform .7s ease; }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+  @media (prefers-reduced-motion: reduce){
+    .reveal{ opacity:1; transform:none; transition:none; }
+    .toggle-big::after, .logo-switch::after{ animation:none; }
+  }
+
+  /* ---------- About ---------- */
+  .about-grid{
+    display:grid; grid-template-columns:1fr 1fr; gap:70px; align-items:center; margin-top:60px;
+  }
+  .about-stats{ display:flex; gap:36px; margin-top:40px; flex-wrap:wrap; }
+  .stat b{ font-size:32px; font-weight:800; display:block; }
+  .stat span{ font-size:13px; color:var(--ink-soft); }
+  .about-visual{
+    aspect-ratio:4/5; border-radius:24px; background:linear-gradient(160deg, #eef1fb, #dfe6fb);
+    position:relative; overflow:hidden; border:1px solid var(--line);
+  }
+  .about-visual .grid-lines{
+    position:absolute; inset:0;
+    background-image:linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size:36px 36px; opacity:.5;
+  }
+  .about-visual .core{
+    position:absolute; width:130px; height:130px; border-radius:50%; left:50%; top:50%;
+    transform:translate(-50%,-50%);
+    background:radial-gradient(circle at 35% 30%, var(--on-glow), var(--on));
+    box-shadow:0 0 90px rgba(46,91,255,.45);
+  }
+  @media (max-width:860px){ .about-grid{ grid-template-columns:1fr; } .about-visual{ order:-1; aspect-ratio:16/10; } }
+
+  /* ---------- Business toggle cards ---------- */
+  .biz-grid{
+    display:grid; grid-template-columns:repeat(6,1fr); grid-template-rows:repeat(2,220px);
+    gap:16px; margin-top:60px;
+  }
+  .biz-card{
+    grid-column:span 3; border-radius:var(--radius); padding:30px; position:relative;
+    background:var(--surface); border:1px solid var(--line); overflow:hidden;
+    display:flex; flex-direction:column; justify-content:flex-end;
+    transition:transform .35s ease, box-shadow .35s ease;
+  }
+  .biz-card:nth-child(1){ grid-column:span 3; }
+  .biz-card:nth-child(2){ grid-column:span 3; }
+  .biz-card:nth-child(3){ grid-column:span 2; }
+  .biz-card:nth-child(4){ grid-column:span 2; }
+  .biz-card:nth-child(5){ grid-column:span 2; }
+  .biz-card .card-toggle{
+    position:absolute; top:24px; right:24px; width:40px; height:22px; border-radius:99px;
+    background:var(--off-soft); border:1px solid var(--line);
+  }
+  .biz-card .card-toggle::after{
+    content:''; position:absolute; top:2px; left:2px; width:16px; height:16px; border-radius:50%;
+    background:var(--off); transition:all .35s ease;
+  }
+  .biz-card .num{ position:absolute; top:24px; left:28px; font-size:12px; color:var(--off); font-weight:600;}
+  .biz-card h3{ font-size:21px; font-weight:800; letter-spacing:-0.01em; margin-bottom:10px; }
+  .biz-card p{ font-size:14px; color:var(--ink-soft); max-width:34ch; }
+  .biz-card:hover, .biz-card:focus-within{
+    transform:translateY(-6px); box-shadow:0 24px 50px -20px rgba(46,91,255,.35); border-color:var(--on);
+  }
+  .biz-card:hover .card-toggle, .biz-card:focus-within .card-toggle{ background:rgba(46,91,255,.12); border-color:var(--on); }
+  .biz-card:hover .card-toggle::after, .biz-card:focus-within .card-toggle::after{
+    transform:translateX(18px); background:var(--on);
+  }
+  @media (max-width:980px){
+    .biz-grid{ grid-template-columns:repeat(2,1fr); grid-template-rows:none; }
+    .biz-card, .biz-card:nth-child(n){ grid-column:span 1; height:200px; }
+  }
+  @media (max-width:560px){
+    .biz-grid{ grid-template-columns:1fr; }
+  }
+
+  /* ---------- Portfolio / Project archive ---------- */
+  .archive{ background:var(--ink); color:#fff; }
+  .archive .section-desc{ color:#9CA3B4; }
+  .filter-row{ display:flex; gap:10px; flex-wrap:wrap; margin:44px 0 36px; }
+  .filter-chip{
+    padding:9px 18px; border-radius:99px; border:1px solid rgba(255,255,255,.18);
+    font-size:13.5px; font-weight:600; color:#B8BEC9; cursor:pointer; transition:all .2s;
+    background:transparent;
+  }
+  .filter-chip.active, .filter-chip:hover{ background:var(--on); border-color:var(--on); color:#fff; }
+  .proj-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+  .proj-card{
+    background:#1B1E27; border:1px solid #2A2E3A; border-radius:16px; padding:24px;
+    transition:opacity .25s, transform .25s, border-color .25s;
+  }
+  .proj-card:hover{ border-color:var(--on); }
+  .proj-card.hide{ display:none; }
+  .proj-top{ display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;}
+  .proj-code{ font-size:12px; color:#6B7280; }
+  .status-pill{ display:flex; align-items:center; gap:6px; font-size:11.5px; font-weight:600; padding:4px 10px; border-radius:99px; }
+  .status-pill.on{ background:rgba(46,91,255,.18); color:var(--on-glow); }
+  .status-pill.off{ background:rgba(255,255,255,.06); color:#8A90A0; }
+  .status-pill .dot{ width:6px; height:6px; border-radius:50%; background:currentColor; }
+  .proj-card h4{ font-size:17px; font-weight:700; margin-bottom:8px; }
+  .proj-card .tag{ font-size:12.5px; color:#8A90A0; }
+  @media (max-width:900px){ .proj-grid{ grid-template-columns:repeat(2,1fr); } }
+  @media (max-width:600px){ .proj-grid{ grid-template-columns:1fr; } }
+
+  /* ---------- Platform strip ---------- */
+  .platform-strip{ display:flex; gap:16px; overflow-x:auto; margin-top:50px; padding-bottom:10px; }
+  .platform-item{
+    flex:none; width:220px; height:130px; border-radius:16px; border:1px solid var(--line);
+    background:var(--surface); display:flex; flex-direction:column; justify-content:space-between; padding:20px;
+  }
+  .platform-item .p-dot{ width:28px; height:28px; border-radius:8px; background:var(--off-soft); display:flex; align-items:center; justify-content:center; }
+  .platform-item strong{ font-size:14.5px; font-weight:700; }
+
+  /* ---------- CTA banner ---------- */
+  .cta-banner{
+    background:linear-gradient(120deg, var(--on-deep), var(--on));
+    border-radius:28px; padding:70px 60px; text-align:center; color:#fff; position:relative; overflow:hidden;
+  }
+  .cta-banner h2{ font-size:clamp(28px,4vw,42px); font-weight:800; letter-spacing:-0.02em; }
+  .cta-banner p{ margin-top:14px; color:rgba(255,255,255,.85); }
+  .cta-banner .btn-primary{ background:#fff; color:var(--on-deep); margin-top:30px; }
+  .cta-banner .btn-primary:hover{ background:#0d1117; color:#fff; }
+
+  /* ---------- Footer ---------- */
+  footer{ padding:70px 0 40px; border-top:1px solid var(--line); }
+  .footer-top{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:40px; padding-bottom:50px; }
+  .footer-cols{ display:flex; gap:70px; flex-wrap:wrap; }
+  .footer-col h5{ font-size:13px; color:var(--off); margin-bottom:14px; font-weight:600;}
+  .footer-col a{ display:block; font-size:14.5px; color:var(--ink-soft); margin-bottom:10px; }
+  .footer-col a:hover{ color:var(--on); }
+  .footer-bottom{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; font-size:12.5px; color:var(--off); padding-top:26px; border-top:1px solid var(--line); }
 </style>
-
 </head>
-
 <body>
 
-<div align="center">
+<header id="siteHeader">
+  <div class="wrap nav-row">
+    <a href="#top" class="logo"><span class="logo-switch"></span>OnOff</a>
+    <nav>
+      <ul>
+        <li><a href="#about"><span class="num mono">01</span>소개</a></li>
+        <li><a href="#coding"><span class="num mono">02</span>코딩·로봇교육</a></li>
+        <li><a href="#arvr"><span class="num mono">03</span>AR·VR, 메이커</a></li>
+        <li><a href="#equip"><span class="num mono">04</span>기자재</a></li>
+        <li><a href="#space"><span class="num mono">05</span>공간구축</a></li>
+        <li><a href="#shop"><span class="num mono">06</span>쇼핑몰</a></li>
+      </ul>
+    </nav>
+    <a href="#contact" class="nav-cta">도입 문의</a>
+  </div>
+</header>
 
-<h1>카페24 웹호스팅 -> 새 도메인으로 생성 불가</h1>
+<section class="hero" id="top">
+  <div class="wrap hero-inner">
+    <div class="eyebrow"><span class="dot"></span> AI EDUCATION PLATFORM</div>
+    <h1>배움의 <span class="switch-word">스위치</span>를<br>켜다</h1>
+    <p class="sub">코딩·로봇부터 AR·VR, 기자재, 공간까지 — 온오프는 학교와 기관의 AI 교육을 하나의 흐름으로 설계하고, 모든 프로젝트를 체계적으로 관리합니다.</p>
+    <div class="hero-cta">
+      <a href="#coding" class="btn btn-primary">사업분야 보기 →</a>
+      <a href="#contact" class="btn btn-ghost">도입 상담하기</a>
+    </div>
+  </div>
+  <div class="hero-switch-visual">
+    <div class="toggle-big"></div>
+    <p class="hero-caption mono">OFF → ON : 교육이 켜지는 순간</p>
+  </div>
+</section>
 
-<p>요금제 : 10G 광아우토반 FullSSD 퍼스트클래스</p>
-<div style="text-align:left;">
-현재 이용 중이신 퍼스트클래스 요금제는 <br>
-보유 도메인을 최대 8개까지 추가로 연결할 수 있으나, <br>
-한 호스팅에 여러 도메인을 연결하시더라도 모든 도메인이 동일한 홈페이지(www 폴더)로 접속됩니다.<br>
-즉, 기존 도메인(on-edu.net)과 새 도메인을 하나의 호스팅에 함께 연결하는 것은 가능하지만, <br>
-각 도메인에 서로 다른 내용의 홈페이지를 표시하는 것은 지원되지 않습니다.<br><br>
+<section id="about">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="section-tag"><span class="line"></span>ABOUT ONOFF</div>
+      <h2 class="section-title">교육 현장에 켜는<br>가장 확실한 스위치</h2>
+    </div>
+    <div class="about-grid">
+      <div class="reveal">
+        <p class="section-desc" style="max-width:100%;">
+          온오프는 AI, 로봇, 디지털 기술을 교육 현장에 접목해 학교·교육청·공공기관이 신뢰하고 실행할 수 있는 미래교육 모델을 만듭니다. 콘텐츠 기획부터 기자재 제작, 공간 구축, 사후 운영까지 — 하나의 파트너가 처음부터 끝까지 책임지는 구조를 지향합니다.
+        </p>
+        <div class="about-stats">
+          <div class="stat"><b class="mono">06</b><span>사업 영역</span></div>
+          <div class="stat"><b class="mono">1:1</b><span>전담 프로젝트 관리</span></div>
+          <div class="stat"><b class="mono">ON</b><span>원스톱 솔루션</span></div>
+        </div>
+      </div>
+      <div class="about-visual reveal">
+        <div class="grid-lines"></div>
+        <div class="core"></div>
+      </div>
+    </div>
+  </div>
+</section>
 
-[처리 안내]<br>
-1. 기존 홈페이지와 다른 내용의 홈페이지를 새 도메인으로 별도 운영하시려면, <br>
-웹호스팅을 하나 더 신규 신청하신 후 새 도메인을 그 신규 호스팅에 연결하여 사용하셔야 합니다.<br>
-- 문의 주신 대로 계정(호스팅)을 하나 더 만드는 방식이 맞습니다.<br>
-- 현재 사용 중이신 대표 아이디로 로그인하신 후 추가 웹호스팅을 신청하시면 새 서비스 아이디가 생성되며, <br>
-이 신규 호스팅에 새 도메인을 연결하시면 됩니다.<br><br>
+<section id="coding">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="section-tag"><span class="line"></span>BUSINESS</div>
+      <h2 class="section-title">여섯 개의 스위치,<br>하나의 교육 흐름</h2>
+      <p class="section-desc">각 영역은 독립적으로도, 하나의 통합 솔루션으로도 작동합니다. 카드에 마우스를 올려 스위치를 켜보세요.</p>
+    </div>
+    <div class="biz-grid">
+      <div class="biz-card reveal" tabindex="0">
+        <span class="num mono">02</span><div class="card-toggle"></div>
+        <h3>코딩·로봇교육</h3>
+        <p>블록코딩부터 AI 로봇 상호작용 수업까지, 단계별 커리큘럼으로 사고력을 설계합니다.</p>
+      </div>
+      <div class="biz-card reveal" tabindex="0">
+        <span class="num mono">03</span><div class="card-toggle"></div>
+        <h3>AR·VR, 메이커</h3>
+        <p>가상·증강현실 콘텐츠와 메이커 활동으로 상상을 직접 만들어보는 경험을 제공합니다.</p>
+      </div>
+      <div class="biz-card reveal" tabindex="0">
+        <span class="num mono">04</span><div class="card-toggle"></div>
+        <h3>기자재</h3>
+        <p>수업 목적에 맞춘 맞춤형 교구·장비를 기획, 제작합니다.</p>
+      </div>
+      <div class="biz-card reveal" tabindex="0">
+        <span class="num mono">05</span><div class="card-toggle"></div>
+        <h3>공간구축</h3>
+        <p>AI교실, 체험관 등 교육 공간을 설계부터 시공까지 원스톱으로 구축합니다.</p>
+      </div>
+      <div class="biz-card reveal" tabindex="0">
+        <span class="num mono">06</span><div class="card-toggle"></div>
+        <h3>쇼핑몰</h3>
+        <p>검증된 교육 교구와 콘텐츠를 온라인으로 바로 만나보실 수 있습니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-2. 가장 저렴한 방법<br>
-- 새로 운영하실 홈페이지에 필요한 용량과 트래픽 사양에 맞추어 웹호스팅 요금제를 선택하시면 됩니다.<br>
-- 운영하실 사이트의 규모가 크지 않다면 하위 요금제로 시작하신 뒤, 필요 시 상위 요금제로 변경하실 수 있습니다.<br>
-- 신규 신청 가능한 웹호스팅 상품과 요금제별 사양·금액은 카페24 호스팅 신청 페이지에서 확인하신 후 선택해 주시기 바랍니다.<br><br>
+<section class="archive" id="arvr">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="section-tag" style="color:var(--on-glow);"><span class="line" style="background:var(--on-glow);"></span>PROJECT ARCHIVE</div>
+      <h2 class="section-title">체계적으로 정리되는<br>포트폴리오</h2>
+      <p class="section-desc">진행한 모든 프로젝트는 분야·상태별로 분류되어 언제든 확인할 수 있습니다.</p>
+    </div>
+    <div class="filter-row" id="filterRow">
+      <button class="filter-chip active" data-filter="all">전체</button>
+      <button class="filter-chip" data-filter="coding">코딩·로봇</button>
+      <button class="filter-chip" data-filter="arvr">AR·VR·메이커</button>
+      <button class="filter-chip" data-filter="equip">기자재</button>
+      <button class="filter-chip" data-filter="space">공간구축</button>
+    </div>
+    <div class="proj-grid" id="projGrid">
+      <div class="proj-card" data-cat="coding">
+        <div class="proj-top"><span class="proj-code mono">PJ-2026-014</span><span class="status-pill on"><span class="dot"></span>ON · 완료</span></div>
+        <h4>OO초등학교 AI 코딩 정규수업</h4>
+        <span class="tag">코딩·로봇교육</span>
+      </div>
+      <div class="proj-card" data-cat="arvr">
+        <div class="proj-top"><span class="proj-code mono">PJ-2026-021</span><span class="status-pill off"><span class="dot"></span>OFF · 진행중</span></div>
+        <h4>메타버스 메이커 체험관 콘텐츠</h4>
+        <span class="tag">AR·VR, 메이커</span>
+      </div>
+      <div class="proj-card" data-cat="space">
+        <div class="proj-top"><span class="proj-code mono">PJ-2025-098</span><span class="status-pill on"><span class="dot"></span>ON · 완료</span></div>
+        <h4>△△교육청 AI교실 공간 구축</h4>
+        <span class="tag">공간구축</span>
+      </div>
+      <div class="proj-card" data-cat="equip">
+        <div class="proj-top"><span class="proj-code mono">PJ-2025-081</span><span class="status-pill on"><span class="dot"></span>ON · 완료</span></div>
+        <h4>맞춤형 로봇 교구 세트 제작</h4>
+        <span class="tag">기자재</span>
+      </div>
+      <div class="proj-card" data-cat="coding">
+        <div class="proj-top"><span class="proj-code mono">PJ-2025-076</span><span class="status-pill off"><span class="dot"></span>OFF · 진행중</span></div>
+        <h4>방과후 로봇 코딩 아카데미</h4>
+        <span class="tag">코딩·로봇교육</span>
+      </div>
+      <div class="proj-card" data-cat="arvr">
+        <div class="proj-top"><span class="proj-code mono">PJ-2025-063</span><span class="status-pill on"><span class="dot"></span>ON · 완료</span></div>
+        <h4>VR 진로체험 콘텐츠 개발</h4>
+        <span class="tag">AR·VR, 메이커</span>
+      </div>
+    </div>
+  </div>
+</section>
 
-참고로, 기존 도메인 안에서 하위 주소(예: event.on-edu.net)로 특정 폴더를 나누어 운영하는 서브도메인 기능은 <br>
-현재 퍼스트클래스 요금제에서 이용하실 수 있으나(서브도메인 20개), <br>
-이는 기존 도메인의 하위 주소를 활용하는 방식입니다. <br>
-별도로 확보하신 새 도메인을 독립된 사이트로 운영하시려는 경우에는 위와 같이 신규 웹호스팅 신청이 필요합니다.
+<section id="equip">
+  <div class="wrap">
+    <div class="platform-strip-wrap reveal">
+      <div class="section-tag"><span class="line"></span>PLATFORM</div>
+      <h2 class="section-title">온오프와 연결된 서비스들</h2>
+    </div>
+    <div class="platform-strip">
+      <div class="platform-item"><div class="p-dot mono">01</div><strong>기자재 카탈로그</strong></div>
+      <div class="platform-item"><div class="p-dot mono">02</div><strong>강사양성 아카데미</strong></div>
+      <div class="platform-item"><div class="p-dot mono">03</div><strong>교육 신청 시스템</strong></div>
+      <div class="platform-item"><div class="p-dot mono">04</div><strong>공간구축 사례집</strong></div>
+      <div class="platform-item"><div class="p-dot mono">05</div><strong>온오프 쇼핑몰</strong></div>
+    </div>
+  </div>
+</section>
 
-</div>
-</div>
+<section id="space">
+  <div class="wrap">
+    <div class="cta-banner reveal">
+      <h2>지금, 우리 학교의<br>스위치를 켤 시간입니다</h2>
+      <p>AI 교육 도입부터 공간 구축까지, 온오프 담당자가 처음부터 끝까지 함께합니다.</p>
+      <a href="#contact" class="btn btn-primary">도입 상담 신청 →</a>
+    </div>
+  </div>
+</section>
+
+<footer id="contact" class="wrap">
+  <div class="footer-top">
+    <div>
+      <a href="#top" class="logo"><span class="logo-switch"></span>OnOff</a>
+      <p style="margin-top:16px; color:var(--ink-soft); font-size:14px; max-width:32ch;">AI 교육으로 배움의 스위치를 켜는 사람들.</p>
+    </div>
+    <div class="footer-cols">
+      <div class="footer-col">
+        <h5>BUSINESS</h5>
+        <a href="#coding">코딩·로봇교육</a>
+        <a href="#arvr">AR·VR, 메이커</a>
+        <a href="#equip">기자재</a>
+        <a href="#space">공간구축</a>
+        <a href="#shop">쇼핑몰</a>
+      </div>
+      <div class="footer-col">
+        <h5>COMPANY</h5>
+        <a href="#about">회사소개</a>
+        <a href="#">채용</a>
+        <a href="#">공지사항</a>
+      </div>
+      <div class="footer-col" id="shop">
+        <h5>CONTACT</h5>
+        <a href="#">고객센터 1670-0000</a>
+        <a href="#">partner@onoff-edu.com</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 OnOff Inc. All rights reserved.</span>
+    <span>사업자등록번호 000-00-00000 · 대표 홍길동</span>
+  </div>
+</footer>
+
+<script>
+  // header scroll state
+  const header = document.getElementById('siteHeader');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 10);
+  });
+
+  // reveal on scroll
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('in'); });
+  }, { threshold: 0.15 });
+  reveals.forEach(el => io.observe(el));
+
+  // portfolio filter
+  const chips = document.querySelectorAll('.filter-chip');
+  const cards = document.querySelectorAll('.proj-card');
+  chips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      chips.forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      const f = chip.dataset.filter;
+      cards.forEach(card => {
+        card.classList.toggle('hide', f !== 'all' && card.dataset.cat !== f);
+      });
+    });
+  });
+</script>
 
 </body>
 </html>
