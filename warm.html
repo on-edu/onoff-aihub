@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OnOff | AI가 켜는 따뜻한 배움</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FBF5EC;
+    --surface:#FFFFFF;
+    --surface-warm:#FFF1E0;
+    --ink:#2B2015;
+    --ink-soft:#8C7A68;
+    --amber:#FF7A30;
+    --gold:#FFB648;
+    --rose:#FF6F61;
+    --line:#EFE1CC;
+    --radius:22px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{ background:var(--bg); color:var(--ink); font-family:'Pretendard',-apple-system,sans-serif; line-height:1.55; overflow-x:hidden; }
+  .sora{ font-family:'Sora', sans-serif; }
+  a{ color:inherit; text-decoration:none; }
+  ul{ list-style:none; }
+  .wrap{ max-width:1180px; margin:0 auto; padding:0 32px; }
+  ::selection{ background:var(--amber); color:#fff; }
+
+  header{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    background:rgba(251,245,236,0.82); backdrop-filter:blur(12px);
+    border-bottom:1px solid transparent; transition:border-color .3s ease;
+  }
+  header.scrolled{ border-color:var(--line); }
+  .nav-row{ display:flex; align-items:center; justify-content:space-between; height:80px; }
+  .logo{ display:flex; align-items:center; gap:10px; font-weight:800; font-size:20px; letter-spacing:-0.01em; }
+  .logo-spark{
+    width:22px; height:22px; border-radius:50% 50% 50% 4px;
+    background:linear-gradient(135deg, var(--gold), var(--amber));
+    transform:rotate(-10deg);
+  }
+  nav ul{ display:flex; gap:4px; }
+  nav a{ padding:11px 18px; font-size:14.5px; font-weight:600; color:var(--ink-soft); border-radius:99px; transition:color .2s, background .2s; }
+  nav a:hover{ color:var(--ink); background:var(--surface-warm); }
+  .nav-cta{ padding:11px 22px; border-radius:99px; font-weight:700; font-size:14px; background:var(--ink); color:#fff !important; }
+  .nav-cta:hover{ background:var(--amber); }
+  @media (max-width:1040px){ nav ul{ display:none; } }
+
+  /* ---------- Hero : goo blob ---------- */
+  .hero{ min-height:100vh; display:flex; align-items:center; position:relative; padding-top:90px; overflow:hidden; }
+  .goo-stage{ position:absolute; inset:0; z-index:0; filter:url(#goo); }
+  .blob{ position:absolute; border-radius:50%; opacity:.85; }
+  .b1{ width:340px; height:340px; left:8%; top:18%; background:radial-gradient(circle at 35% 30%, var(--gold), var(--amber)); animation: drift1 13s ease-in-out infinite; }
+  .b2{ width:260px; height:260px; right:12%; top:10%; background:radial-gradient(circle at 40% 35%, #FFD79A, var(--gold)); animation: drift2 16s ease-in-out infinite; }
+  .b3{ width:300px; height:300px; right:20%; bottom:6%; background:radial-gradient(circle at 35% 30%, var(--rose), var(--amber)); animation: drift3 11s ease-in-out infinite; }
+  .b4{ width:200px; height:200px; left:22%; bottom:12%; background:radial-gradient(circle at 40% 30%, var(--gold), #FFDCA8); animation: drift1 9s ease-in-out infinite reverse; }
+  @keyframes drift1{ 0%,100%{ transform:translate(0,0) scale(1); } 50%{ transform:translate(60px,40px) scale(1.15); } }
+  @keyframes drift2{ 0%,100%{ transform:translate(0,0) scale(1); } 50%{ transform:translate(-50px,60px) scale(0.9); } }
+  @keyframes drift3{ 0%,100%{ transform:translate(0,0) scale(1); } 50%{ transform:translate(-40px,-50px) scale(1.1); } }
+  .grain{ position:absolute; inset:0; z-index:1; opacity:.05; mix-blend-mode:multiply;
+    background-image:radial-gradient(rgba(0,0,0,.6) 1px, transparent 1px); background-size:3px 3px; }
+  .hero-inner{ position:relative; z-index:2; text-align:center; width:100%; }
+  .eyebrow{ display:inline-flex; align-items:center; gap:8px; font-size:13px; font-weight:700; letter-spacing:.06em; color:var(--amber); margin-bottom:24px; }
+  .eyebrow .dot{ width:6px; height:6px; border-radius:50%; background:var(--amber); }
+  .hero h1{ font-size:clamp(38px,6.2vw,78px); font-weight:800; letter-spacing:-0.03em; line-height:1.14; color:var(--ink); }
+  .hero h1 span{ color:var(--amber); }
+  .hero p.sub{ margin:24px auto 0; font-size:17.5px; color:var(--ink-soft); max-width:480px; }
+  .hero-cta{ margin-top:40px; display:flex; gap:14px; justify-content:center; }
+  .btn{ padding:15px 28px; border-radius:99px; font-weight:700; font-size:14.5px; display:inline-flex; align-items:center; gap:8px; transition:all .25s; }
+  .btn-primary{ background:linear-gradient(120deg, var(--amber), var(--gold)); color:#2B2015; }
+  .btn-primary:hover{ transform:translateY(-2px); filter:brightness(1.06); }
+  .btn-ghost{ border:1px solid var(--line); color:var(--ink); background:rgba(255,255,255,.5); }
+  .btn-ghost:hover{ border-color:var(--amber); color:var(--amber); }
+  @media (prefers-reduced-motion: reduce){ .blob{ animation:none; } }
+
+  /* ---------- Section shared ---------- */
+  section{ padding:120px 0; }
+  .section-tag{ display:flex; align-items:center; gap:12px; margin-bottom:18px; font-size:13px; font-weight:700; color:var(--amber); }
+  .section-tag .line{ width:30px; height:1px; background:var(--amber); }
+  h2.section-title{ font-size:clamp(28px,4vw,44px); font-weight:800; letter-spacing:-0.02em; max-width:16ch; }
+  .section-desc{ margin-top:16px; color:var(--ink-soft); max-width:520px; font-size:16px; }
+  .reveal{ opacity:0; transform:translateY(26px); transition:opacity .7s ease, transform .7s ease; }
+  .reveal.in{ opacity:1; transform:none; }
+  @media (prefers-reduced-motion: reduce){ .reveal{ opacity:1; transform:none; transition:none; } }
+
+  /* ---------- About ---------- */
+  .about-grid{ display:grid; grid-template-columns:1fr 1fr; gap:70px; align-items:center; margin-top:56px; }
+  .about-stats{ display:flex; gap:34px; margin-top:36px; flex-wrap:wrap; }
+  .stat b{ font-size:30px; font-weight:800; display:block; color:var(--amber); }
+  .stat span{ font-size:12.5px; color:var(--ink-soft); }
+  .art{
+    aspect-ratio:4/5; border-radius:28px; position:relative; overflow:hidden;
+    box-shadow:0 30px 60px -25px rgba(255,122,48,.35);
+  }
+  .art .grain{ opacity:.06; }
+  @media (max-width:860px){ .about-grid{ grid-template-columns:1fr; } .art{ order:-1; aspect-ratio:16/10; } }
+
+  /* abstract art variants (warm, realistic-feeling gradients) */
+  .art-intro{ background:
+    radial-gradient(circle at 30% 20%, #FFD79A 0%, transparent 45%),
+    radial-gradient(circle at 75% 65%, #FF8A50 0%, transparent 55%),
+    linear-gradient(160deg, #FFE8CE, #FFB877); }
+  .art-coding{ background:
+    radial-gradient(circle at 70% 25%, #FFC98A 0%, transparent 50%),
+    radial-gradient(circle at 20% 75%, #FF7A30 0%, transparent 55%),
+    linear-gradient(150deg, #FFF3E1, #FFA85E); }
+  .art-arvr{ background:
+    radial-gradient(circle at 25% 30%, #FFB6A0 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, #FF6F61 0%, transparent 55%),
+    linear-gradient(140deg, #FFEDE3, #FF9A82); }
+  .art-equip{ background:
+    radial-gradient(circle at 60% 20%, #FFE1A8 0%, transparent 50%),
+    radial-gradient(circle at 30% 80%, #FFB648 0%, transparent 55%),
+    linear-gradient(150deg, #FFF6E4, #FFCB7C); }
+  .art-space{ background:
+    radial-gradient(circle at 35% 25%, #FFD2A8 0%, transparent 50%),
+    radial-gradient(circle at 75% 75%, #FF8A30 0%, transparent 55%),
+    linear-gradient(160deg, #FFEEDA, #FFAD68); }
+  .art-shop{ background:
+    radial-gradient(circle at 70% 30%, #FFCE9E 0%, transparent 50%),
+    radial-gradient(circle at 25% 70%, #FF7A50 0%, transparent 55%),
+    linear-gradient(150deg, #FFF2E0, #FFA46A); }
+  .art::before{
+    content:''; position:absolute; inset:0;
+    background:linear-gradient(180deg, transparent 40%, rgba(43,32,21,0.18) 100%);
+  }
+  .art .ring{ position:absolute; border-radius:50%; border:1px solid rgba(255,255,255,.5); }
+  .art .r1{ width:60%; aspect-ratio:1/1; left:20%; top:8%; }
+  .art .r2{ width:38%; aspect-ratio:1/1; right:10%; bottom:14%; }
+
+  /* ---------- Business : editorial alternating rows (no interconnection) ---------- */
+  .biz-row{ display:grid; grid-template-columns:1fr 1fr; gap:70px; align-items:center; padding:70px 0; border-top:1px solid var(--line); }
+  .biz-row:first-of-type{ border-top:none; }
+  .biz-row.reverse .art{ order:2; }
+  .biz-row .num{ font-family:'Sora',sans-serif; font-size:13px; color:var(--ink-soft); font-weight:600; margin-bottom:14px; display:block; }
+  .biz-row h3{ font-size:clamp(22px,3vw,30px); font-weight:800; letter-spacing:-0.01em; margin-bottom:14px; }
+  .biz-row p{ color:var(--ink-soft); font-size:15.5px; max-width:44ch; margin-bottom:22px; }
+  .biz-row .art{ aspect-ratio:5/4; box-shadow:0 26px 55px -25px rgba(255,122,48,.3); }
+  .biz-link{ display:inline-flex; align-items:center; gap:8px; font-weight:700; font-size:14.5px; color:var(--amber); }
+  .biz-link:hover{ gap:12px; }
+  @media (max-width:860px){ .biz-row, .biz-row.reverse .art{ grid-template-columns:1fr; order:0; } .biz-row{ grid-template-columns:1fr; } }
+
+  /* ---------- Archive ---------- */
+  .filter-row{ display:flex; gap:10px; flex-wrap:wrap; margin:44px 0 36px; }
+  .filter-chip{ padding:9px 18px; border-radius:99px; border:1px solid var(--line); font-size:13px; font-weight:600; color:var(--ink-soft); cursor:pointer; background:var(--surface); transition:all .2s; }
+  .filter-chip.active, .filter-chip:hover{ background:var(--ink); border-color:var(--ink); color:#fff; }
+  .proj-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  .proj-card{ background:var(--surface); border:1px solid var(--line); border-radius:18px; padding:24px; transition:border-color .25s, transform .25s; }
+  .proj-card:hover{ border-color:var(--amber); transform:translateY(-4px); }
+  .proj-card.hide{ display:none; }
+  .proj-top{ display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+  .proj-code{ font-size:12px; color:var(--ink-soft); font-family:'Sora',sans-serif; }
+  .status-pill{ display:flex; align-items:center; gap:6px; font-size:11px; font-weight:600; padding:4px 10px; border-radius:99px; background:var(--surface-warm); color:var(--amber); }
+  .status-pill .dot{ width:6px; height:6px; border-radius:50%; background:currentColor; }
+  .proj-card h4{ font-size:16.5px; font-weight:700; margin-bottom:8px; }
+  .proj-card .tag{ font-size:12.5px; color:var(--ink-soft); }
+  @media (max-width:900px){ .proj-grid{ grid-template-columns:repeat(2,1fr); } }
+  @media (max-width:600px){ .proj-grid{ grid-template-columns:1fr; } }
+
+  /* ---------- CTA ---------- */
+  .cta-banner{ border-radius:28px; padding:70px 50px; text-align:center; position:relative; overflow:hidden; background:linear-gradient(120deg, var(--amber), var(--gold)); color:#2B2015; }
+  .cta-banner h2{ font-size:clamp(26px,4vw,40px); font-weight:800; letter-spacing:-0.02em; }
+  .cta-banner p{ margin-top:14px; color:#4A3420; }
+  .cta-banner .btn-primary{ background:#2B2015; color:#fff; margin-top:30px; }
+  .cta-banner .btn-primary:hover{ background:#171009; }
+
+  /* ---------- Footer ---------- */
+  footer{ padding:70px 0 40px; border-top:1px solid var(--line); }
+  .footer-top{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:40px; padding-bottom:50px; }
+  .footer-cols{ display:flex; gap:70px; flex-wrap:wrap; }
+  .footer-col h5{ font-size:12px; color:var(--ink-soft); margin-bottom:14px; font-weight:600; }
+  .footer-col a{ display:block; font-size:14px; color:var(--ink-soft); margin-bottom:10px; }
+  .footer-col a:hover{ color:var(--amber); }
+  .footer-bottom{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; font-size:12px; color:var(--ink-soft); padding-top:26px; border-top:1px solid var(--line); }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute">
+  <filter id="goo">
+    <feGaussianBlur in="SourceGraphic" stdDeviation="18" result="blur"/>
+    <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -9" result="goo"/>
+  </filter>
+</svg>
+
+<header id="siteHeader">
+  <div class="wrap nav-row">
+    <a href="#top" class="logo"><span class="logo-spark"></span>OnOff</a>
+    <nav>
+      <ul>
+        <li><a href="#about">소개</a></li>
+        <li><a href="#coding">코딩·로봇교육</a></li>
+        <li><a href="#arvr">AR·VR, 메이커</a></li>
+        <li><a href="#equip">기자재</a></li>
+        <li><a href="#space">공간구축</a></li>
+        <li><a href="#shop">쇼핑몰</a></li>
+      </ul>
+    </nav>
+    <a href="#contact" class="nav-cta">도입 문의</a>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <div class="goo-stage">
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+    <div class="blob b3"></div>
+    <div class="blob b4"></div>
+  </div>
+  <div class="grain"></div>
+  <div class="wrap hero-inner">
+    <div class="eyebrow"><span class="dot"></span>FOCUS ON AI</div>
+    <h1>AI가 <span>따뜻하게</span><br>켜는 배움</h1>
+    <p class="sub">코딩·로봇교육, AR·VR·메이커, 기자재, 공간구축, 쇼핑몰 — 온오프의 여섯 가지 이야기를 만나보세요.</p>
+    <div class="hero-cta">
+      <a href="#coding" class="btn btn-primary">둘러보기 →</a>
+      <a href="#contact" class="btn btn-ghost">도입 상담하기</a>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="section-tag"><span class="line"></span>ABOUT ONOFF</div>
+      <h2 class="section-title">사람을 향한 AI,<br>온기가 있는 교육</h2>
+    </div>
+    <div class="about-grid">
+      <div class="reveal">
+        <p class="section-desc" style="max-width:100%;">
+          온오프는 AI 기술을 교육 현장 가까이로 가져옵니다. 차갑고 낯선 기술이 아니라, 아이들이 편안하게 다가갈 수 있는 따뜻한 배움의 도구로 만드는 것 — 그것이 온오프가 AI를 다루는 방식입니다.
+        </p>
+        <div class="about-stats">
+          <div class="stat"><b>6</b><span>독립된 사업 영역</span></div>
+          <div class="stat"><b>AI</b><span>모든 프로그램의 중심</span></div>
+          <div class="stat"><b>1st</b><span>현장 맞춤 설계</span></div>
+        </div>
+      </div>
+      <div class="art art-intro reveal">
+        <div class="ring r1"></div><div class="ring r2"></div>
+        <div class="grain"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="coding">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="section-tag"><span class="line"></span>BUSINESS</div>
+      <h2 class="section-title">따로, 또 온전한<br>여섯 개의 이야기</h2>
+      <p class="section-desc">각 영역은 독립적인 프로그램으로 운영되며, 필요에 맞게 개별적으로 도입할 수 있습니다.</p>
+    </div>
+
+    <div class="biz-row reveal">
+      <div>
+        <span class="num sora">Coding & Robot</span>
+        <h3>코딩·로봇교육</h3>
+        <p>블록코딩부터 AI 로봇과의 상호작용 수업까지, 아이들의 눈높이에 맞춘 단계별 커리큘럼을 제공합니다.</p>
+        <a href="#" class="biz-link">자세히 보기 →</a>
+      </div>
+      <div class="art art-coding"><div class="ring r1"></div><div class="grain"></div></div>
+    </div>
+
+    <div class="biz-row reverse reveal" id="arvr">
+      <div>
+        <span class="num sora">AR · VR, Maker</span>
+        <h3>AR·VR, 메이커</h3>
+        <p>가상현실과 증강현실 콘텐츠, 메이커 활동을 통해 상상한 것을 직접 만들어보는 경험을 설계합니다.</p>
+        <a href="#" class="biz-link">자세히 보기 →</a>
+      </div>
+      <div class="art art-arvr"><div class="ring r2"></div><div class="grain"></div></div>
+    </div>
+
+    <div class="biz-row reveal" id="equip">
+      <div>
+        <span class="num sora">Equipment</span>
+        <h3>기자재</h3>
+        <p>수업 목적과 공간에 꼭 맞는 맞춤형 교구와 장비를 기획하고 제작합니다.</p>
+        <a href="#" class="biz-link">자세히 보기 →</a>
+      </div>
+      <div class="art art-equip"><div class="ring r1"></div><div class="grain"></div></div>
+    </div>
+
+    <div class="biz-row reverse reveal" id="space">
+      <div>
+        <span class="num sora">Space Building</span>
+        <h3>공간구축</h3>
+        <p>AI교실, 체험관 등 교육 공간을 기획부터 설계, 시공까지 하나의 흐름으로 완성합니다.</p>
+        <a href="#" class="biz-link">자세히 보기 →</a>
+      </div>
+      <div class="art art-space"><div class="ring r2"></div><div class="grain"></div></div>
+    </div>
+
+    <div class="biz-row reveal" id="shop">
+      <div>
+        <span class="num sora">Shopping Mall</span>
+        <h3>쇼핑몰</h3>
+        <p>검증된 교육 교구와 콘텐츠를 온라인에서 바로 만나보실 수 있습니다.</p>
+        <a href="#" class="biz-link">자세히 보기 →</a>
+      </div>
+      <div class="art art-shop"><div class="ring r1"></div><div class="grain"></div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="reveal">
+      <div class="section-tag"><span class="line"></span>PROJECT ARCHIVE</div>
+      <h2 class="section-title">따뜻하게 쌓여가는<br>프로젝트 기록</h2>
+      <p class="section-desc">진행한 모든 프로젝트는 분야·상태별로 정리되어 언제든 확인할 수 있습니다.</p>
+    </div>
+    <div class="filter-row">
+      <button class="filter-chip active" data-filter="all">전체</button>
+      <button class="filter-chip" data-filter="coding">코딩·로봇</button>
+      <button class="filter-chip" data-filter="arvr">AR·VR·메이커</button>
+      <button class="filter-chip" data-filter="equip">기자재</button>
+      <button class="filter-chip" data-filter="space">공간구축</button>
+    </div>
+    <div class="proj-grid" id="projGrid">
+      <div class="proj-card" data-cat="coding">
+        <div class="proj-top"><span class="proj-code sora">PJ-014</span><span class="status-pill"><span class="dot"></span>완료</span></div>
+        <h4>OO초등학교 AI 코딩 정규수업</h4><span class="tag">코딩·로봇교육</span>
+      </div>
+      <div class="proj-card" data-cat="arvr">
+        <div class="proj-top"><span class="proj-code sora">PJ-021</span><span class="status-pill"><span class="dot"></span>진행중</span></div>
+        <h4>메타버스 메이커 체험관 콘텐츠</h4><span class="tag">AR·VR, 메이커</span>
+      </div>
+      <div class="proj-card" data-cat="space">
+        <div class="proj-top"><span class="proj-code sora">PJ-098</span><span class="status-pill"><span class="dot"></span>완료</span></div>
+        <h4>△△교육청 AI교실 공간 구축</h4><span class="tag">공간구축</span>
+      </div>
+      <div class="proj-card" data-cat="equip">
+        <div class="proj-top"><span class="proj-code sora">PJ-081</span><span class="status-pill"><span class="dot"></span>완료</span></div>
+        <h4>맞춤형 로봇 교구 세트 제작</h4><span class="tag">기자재</span>
+      </div>
+      <div class="proj-card" data-cat="coding">
+        <div class="proj-top"><span class="proj-code sora">PJ-076</span><span class="status-pill"><span class="dot"></span>진행중</span></div>
+        <h4>방과후 로봇 코딩 아카데미</h4><span class="tag">코딩·로봇교육</span>
+      </div>
+      <div class="proj-card" data-cat="arvr">
+        <div class="proj-top"><span class="proj-code sora">PJ-063</span><span class="status-pill"><span class="dot"></span>완료</span></div>
+        <h4>VR 진로체험 콘텐츠 개발</h4><span class="tag">AR·VR, 메이커</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="cta-banner reveal">
+      <h2>지금, 우리 학교에도<br>따뜻한 AI를 켜보세요</h2>
+      <p>온오프 담당자가 도입 상담부터 운영까지 함께합니다.</p>
+      <a href="#contact" class="btn btn-primary">도입 상담 신청 →</a>
+    </div>
+  </div>
+</section>
+
+<footer id="contact" class="wrap">
+  <div class="footer-top">
+    <div>
+      <a href="#top" class="logo"><span class="logo-spark"></span>OnOff</a>
+      <p style="margin-top:16px; color:var(--ink-soft); font-size:14px; max-width:32ch;">AI로 따뜻한 배움을 켜는 사람들.</p>
+    </div>
+    <div class="footer-cols">
+      <div class="footer-col">
+        <h5>BUSINESS</h5>
+        <a href="#coding">코딩·로봇교육</a>
+        <a href="#arvr">AR·VR, 메이커</a>
+        <a href="#equip">기자재</a>
+        <a href="#space">공간구축</a>
+        <a href="#shop">쇼핑몰</a>
+      </div>
+      <div class="footer-col">
+        <h5>COMPANY</h5>
+        <a href="#about">회사소개</a>
+        <a href="#">채용</a>
+        <a href="#">공지사항</a>
+      </div>
+      <div class="footer-col">
+        <h5>CONTACT</h5>
+        <a href="#">고객센터 1670-0000</a>
+        <a href="#">partner@onoff-edu.com</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 OnOff Inc. All rights reserved.</span>
+    <span>사업자등록번호 000-00-00000 · 대표 홍길동</span>
+  </div>
+</footer>
+
+<script>
+  const header = document.getElementById('siteHeader');
+  window.addEventListener('scroll', () => header.classList.toggle('scrolled', window.scrollY > 10));
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('in'); });
+  }, { threshold: 0.15 });
+  reveals.forEach(el => io.observe(el));
+
+  const chips = document.querySelectorAll('.filter-chip');
+  const cards = document.querySelectorAll('.proj-card');
+  chips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      chips.forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      const f = chip.dataset.filter;
+      cards.forEach(card => card.classList.toggle('hide', f !== 'all' && card.dataset.cat !== f));
+    });
+  });
+</script>
+
+</body>
+</html>
