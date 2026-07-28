@@ -88,6 +88,15 @@
     overflow:hidden;
   }
   .hero-video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0; }
+
+  .hero-video-overlay{
+    position:absolute; inset:0; z-index:1;
+    background:
+      linear-gradient(180deg, rgba(8,8,15,0.5) 0%, rgba(8,8,15,0.3) 40%, rgba(8,8,15,0.7) 100%);
+  }
+
+
+
   .hero-inner{ position:relative; z-index:2; width:100%; }
   .eyebrow{
     display:inline-flex; align-items:center; gap:8px;
@@ -306,6 +315,7 @@
   <video class="hero-video" autoplay muted loop playsinline preload="auto">
     <source src="assets/hero-bg.mp4" type="video/mp4">
   </video>
+  <div class="hero-video-overlay"></div>
   <div class="wrap hero-inner">
     <div class="eyebrow"><span class="dot"></span> AI EDUCATION PLATFORM</div>
     <h1>배움의 <span class="switch-word">스위치</span>를<br>켜다</h1>
@@ -346,19 +356,25 @@
   <div class="wrap">
     <div class="reveal">
       <div class="section-tag"><span class="line"></span>BUSINESS</div>
-      <h2 class="section-title">여섯 개의 스위치,<br>하나의 교육 흐름</h2>
-      <p class="section-desc">각 영역은 독립적으로도, 하나의 통합 솔루션으로도 작동합니다. 카드에 마우스를 올려 스위치를 켜보세요.</p>
+      <h2 class="section-title">다섯 개의 스위치,<br>하나의 교육 흐름</h2>
+      <p class="section-desc">각 영역은 독립적으로도, 하나의 통합 솔루션으로도 작동합니다.</br>
+	카드에 마우스를 올려 스위치를 켜보세요.</p>
     </div>
     <div class="biz-grid">
       <div class="biz-card reveal" tabindex="0">
-        <span class="num mono">02</span><div class="card-toggle"></div>
+        <span class="num mono">01</span><div class="card-toggle"></div>
         <h3>코딩·로봇교육</h3>
         <p>블록코딩부터 AI 로봇 상호작용 수업까지, 단계별 커리큘럼으로 사고력을 설계합니다.</p>
       </div>
       <div class="biz-card reveal" tabindex="0">
-        <span class="num mono">03</span><div class="card-toggle"></div>
-        <h3>AR·VR, 메이커</h3>
-        <p>가상·증강현실 콘텐츠와 메이커 활동으로 상상을 직접 만들어보는 경험을 제공합니다.</p>
+        <span class="num mono">02</span><div class="card-toggle"></div>
+        <h3>AR·VR</h3>
+        <p>가상·증강현실 콘텐츠로 상상을 직접 만들어보는 경험을 제공합니다.</p>
+      </div>
+      <div class="biz-card reveal" tabindex="0">
+        <span class="num mono">06</span><div class="card-toggle"></div>
+        <h3>찾아가는 AI체험</h3>
+        <p>검증된 교육 교구와 콘텐츠를 바로 만나보실 수 있습니다.</p>
       </div>
       <div class="biz-card reveal" tabindex="0">
         <span class="num mono">04</span><div class="card-toggle"></div>
@@ -370,11 +386,7 @@
         <h3>공간구축</h3>
         <p>AI교실, 체험관 등 교육 공간을 설계부터 시공까지 원스톱으로 구축합니다.</p>
       </div>
-      <div class="biz-card reveal" tabindex="0">
-        <span class="num mono">06</span><div class="card-toggle"></div>
-        <h3>쇼핑몰</h3>
-        <p>검증된 교육 교구와 콘텐츠를 온라인으로 바로 만나보실 수 있습니다.</p>
-      </div>
+
     </div>
   </div>
 </section>
@@ -383,13 +395,13 @@
   <div class="wrap">
     <div class="reveal">
       <div class="section-tag" style="color:var(--on-glow);"><span class="line" style="background:var(--on-glow);"></span>PROJECT ARCHIVE</div>
-      <h2 class="section-title">체계적으로 정리되는<br>포트폴리오</h2>
-      <p class="section-desc">진행한 모든 프로젝트는 분야·상태별로 분류되어 언제든 확인할 수 있습니다.</p>
+      <h2 class="section-title">온교육이 함께한<br>포트폴리오</h2>
+      <p class="section-desc">다양한 교육기관과 진행한 프로젝트들을 확인할 수 있습니다.</p>
     </div>
     <div class="filter-row" id="filterRow">
       <button class="filter-chip active" data-filter="all">전체</button>
       <button class="filter-chip" data-filter="coding">코딩·로봇</button>
-      <button class="filter-chip" data-filter="arvr">AR·VR·메이커</button>
+      <button class="filter-chip" data-filter="arvr">AR·VR</button>
       <button class="filter-chip" data-filter="equip">기자재</button>
       <button class="filter-chip" data-filter="space">공간구축</button>
     </div>
@@ -402,7 +414,7 @@
       <div class="proj-card" data-cat="arvr">
         <div class="proj-top"><span class="proj-code mono">PJ-2026-021</span><span class="status-pill off"><span class="dot"></span>OFF · 진행중</span></div>
         <h4>메타버스 메이커 체험관 콘텐츠</h4>
-        <span class="tag">AR·VR, 메이커</span>
+        <span class="tag">AR·VR</span>
       </div>
       <div class="proj-card" data-cat="space">
         <div class="proj-top"><span class="proj-code mono">PJ-2025-098</span><span class="status-pill on"><span class="dot"></span>ON · 완료</span></div>
@@ -422,7 +434,7 @@
       <div class="proj-card" data-cat="arvr">
         <div class="proj-top"><span class="proj-code mono">PJ-2025-063</span><span class="status-pill on"><span class="dot"></span>ON · 완료</span></div>
         <h4>VR 진로체험 콘텐츠 개발</h4>
-        <span class="tag">AR·VR, 메이커</span>
+        <span class="tag">AR·VR</span>
       </div>
     </div>
   </div>
@@ -458,33 +470,23 @@
   <div class="footer-top">
     <div>
       <a href="#top" class="logo"><span class="logo-switch"></span>OnOff</a>
-      <p style="margin-top:16px; color:var(--ink-soft); font-size:14px; max-width:32ch;">AI 교육으로 배움의 스위치를 켜는 사람들.</p>
+      <p style="margin-top:16px; color:var(--ink-soft); font-size:14px; max-width:32ch;">AI 교육으로 배움의 스위치를 켜는 사람들</p>
     </div>
     <div class="footer-cols">
       <div class="footer-col">
-        <h5>BUSINESS</h5>
-        <a href="#coding">코딩·로봇교육</a>
-        <a href="#arvr">AR·VR, 메이커</a>
-        <a href="#equip">기자재</a>
-        <a href="#space">공간구축</a>
-        <a href="#shop">쇼핑몰</a>
-      </div>
-      <div class="footer-col">
         <h5>COMPANY</h5>
-        <a href="#about">회사소개</a>
-        <a href="#">채용</a>
-        <a href="#">공지사항</a>
+        <a href="http://www.on-edu.net/" target="_blank">회사소개</a>
       </div>
       <div class="footer-col" id="shop">
         <h5>CONTACT</h5>
-        <a href="#">고객센터 1670-0000</a>
-        <a href="#">partner@onoff-edu.com</a>
+        Tel. 1661-2702</br>
+        Mail. wegood315@naver.com
       </div>
     </div>
   </div>
   <div class="footer-bottom">
-    <span>© 2026 OnOff Inc. All rights reserved.</span>
-    <span>사업자등록번호 000-00-00000 · 대표 홍길동</span>
+    <span>© 2026 (주)온교육. All rights reserved.</span>
+    <span>사업자등록번호 617-81-70303  /  대표 김수진·최일석</span>
   </div>
 </footer>
 
