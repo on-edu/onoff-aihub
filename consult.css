@@ -1,13 +1,19 @@
 /* 상담 신청 페이지(consult.html) 전용 스타일 — 공통 요소는 style.css를 따릅니다 */
 
-main.wrap{ max-width:640px; padding-top:150px; padding-bottom:100px; }
+main.wrap{ 
+  max-width:1000px;
+  /*display:150px; */
+  padding-top:100px;
+  padding-bottom:100px; }
 
 main h1{ font-size:clamp(28px,4vw,38px); font-weight:800; letter-spacing:-0.02em; color:var(--ink); }
 main p.sub{ margin-top:14px; color:var(--ink-soft); font-size:15.5px; max-width:46ch; }
 
 .form-frame{
-  margin-top:44px; border:1px solid var(--line); border-radius:var(--radius);
-  overflow:hidden; background:var(--surface);
+  /*margin-top:44px; */
+  border:1px solid var(--line); border-radius:var(--radius);
+  /*overflow:hidden; */
+  background:var(--surface);
 }
 .form-frame iframe{ display:block; border:none; }
 
