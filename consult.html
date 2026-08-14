@@ -65,6 +65,15 @@
     font-size:14.5px; font-weight:600;
   }
   .confirm.show{ display:block; }
+
+  .form-frame{
+    margin-top:44px; border:1px solid var(--line); border-radius:var(--radius);
+    overflow:hidden; background:var(--surface);
+  }
+  .form-frame iframe{ display:block; border:none; }
+  .fallback-link{ margin-top:16px; font-size:13px; color:var(--ink-soft); text-align:center; }
+  .fallback-link a{ color:var(--on); font-weight:600; }
+  .fallback-link a:hover{ text-decoration:underline; }
 </style>
 </head>
 <body>
@@ -81,91 +90,23 @@
   <h1>도입 상담 신청</h1>
   <p class="sub">아래 내용을 작성해 보내주시면, 담당자가 확인 후 빠르게 연락드립니다.</p>
 
-  <form id="consultForm">
-    <div class="row2">
-      <div class="field">
-        <label for="name">담당자 성함<span class="req">*</span></label>
-        <input type="text" id="name" name="name" required placeholder="홍길동">
-      </div>
-      <div class="field">
-        <label for="org">기관/학교명<span class="req">*</span></label>
-        <input type="text" id="org" name="org" required placeholder="OO초등학교">
-      </div>
-    </div>
+  <div class="form-frame">
+    <iframe
+      src="https://docs.google.com/forms/d/e/1FAIpQLSeARS17QJNjkhBmp1cWoFd_vYTRDhL-WBSLfqWzHcMAMMiBdg/viewform?embedded=true"
+      width="100%" height="1400" frameborder="0" marginheight="0" marginwidth="0">
+      로드 중…
+    </iframe>
+  </div>
 
-    <div class="row2">
-      <div class="field">
-        <label for="phone">연락처<span class="req">*</span></label>
-        <input type="tel" id="phone" name="phone" required placeholder="010-0000-0000">
-      </div>
-      <div class="field">
-        <label for="email">회신받을 이메일<span class="req">*</span></label>
-        <input type="email" id="email" name="email" required placeholder="example@email.com">
-      </div>
-    </div>
+  <div class="notice">
+    <b>안내</b> · 폼 작성 후 하단의 <b>제출</b> 버튼을 눌러주시면 상담 신청이 접수됩니다.
+  </div>
 
-    <div class="field">
-      <label for="interest">관심 분야</label>
-      <select id="interest" name="interest">
-        <option value="코딩·로봇교육">코딩·로봇교육</option>
-        <option value="AR·VR, 메이커">AR·VR, 메이커</option>
-        <option value="기자재">기자재</option>
-        <option value="공간구축">공간구축</option>
-        <option value="쇼핑몰">쇼핑몰</option>
-        <option value="전체/잘 모르겠음">전체 / 잘 모르겠음</option>
-      </select>
-    </div>
-
-    <div class="field">
-      <label for="message">상담 내용<span class="req">*</span></label>
-      <textarea id="message" name="message" required placeholder="문의하실 내용을 자유롭게 작성해주세요. (예: 대상 학년, 희망 시기, 예산 범위 등)"></textarea>
-    </div>
-
-    <button type="submit" class="submit-btn">상담 신청 보내기 →</button>
-
-    <div class="notice">
-      <b>안내</b> · 전송 버튼을 누르면 작성하신 내용을 담아 이메일 앱이 열립니다. 그대로 <b>보내기</b>를 눌러주셔야 abc@naver.com으로 최종 접수됩니다.
-    </div>
-
-    <div class="confirm" id="confirmBox">
-      이메일 작성 화면이 열렸어요. 내용을 확인하시고 <b>보내기</b> 버튼을 눌러 상담 신청을 완료해주세요.
-    </div>
-  </form>
+  <p class="fallback-link">
+    폼이 보이지 않는다면
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSeARS17QJNjkhBmp1cWoFd_vYTRDhL-WBSLfqWzHcMAMMiBdg/viewform" target="_blank" rel="noopener">여기를 눌러 새 창에서 작성</a>해주세요.
+  </p>
 </main>
-
-<script>
-  const form = document.getElementById('consultForm');
-  const confirmBox = document.getElementById('confirmBox');
-
-  form.addEventListener('submit', function(e){
-    e.preventDefault();
-
-    const data = {
-      name: form.name.value.trim(),
-      org: form.org.value.trim(),
-      phone: form.phone.value.trim(),
-      email: form.email.value.trim(),
-      interest: form.interest.value,
-      message: form.message.value.trim()
-    };
-
-    const subject = `[상담신청] ${data.org} - ${data.name}`;
-    const body =
-`■ 담당자 성함: ${data.name}
-■ 기관/학교명: ${data.org}
-■ 연락처: ${data.phone}
-■ 회신 이메일: ${data.email}
-■ 관심 분야: ${data.interest}
-
-■ 상담 내용
-${data.message}`;
-
-    const mailto = `mailto:myhands@naver.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    window.location.href = mailto;
-
-    confirmBox.classList.add('show');
-  });
-</script>
 
 </body>
 </html>
