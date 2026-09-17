@@ -40,7 +40,7 @@ header.scrolled{ border-color:var(--line); background:rgba(247,248,251,0.95); }
   height:76px;
 }
 .logo{ display:flex; align-items:center; gap:10px; font-weight:800; font-size:20px; letter-spacing:-0.02em;}
-.logo-img{ height:34px; width:auto; display:block; }
+.logo-img{ height:60px; width:auto; display:block; }
 .logo-switch{
   width:34px; height:18px; border-radius:99px; background:var(--ink);
   position:relative; flex:none;
